@@ -1,2 +1,106 @@
 # aoodi2_10p
 Advanced Object Oriented Design II
+
+## Material
+http://tinyurl.com/Objetos2-Octubre2019
+SuperObjetos2
+
+## Topics
+- Idioms
+- Patrones de diseño
+- Excepciones
+- Frameworks
+- Metaprogramacion
+
+Dia 1
+=====
+
+Modelo computable, o sea formal, que exprese el dominio de conocimiento (expresado en lenguaje natural, de manera ambigua).
+El proceso de formacion del modelo es un proceso de aprendizaje, iterativo.
+Para cada observacion, ente o cosa del dominio, se espera disponer de un objeto en el modelo computable.
+Objeto hecho y derecho -> First class object
+Reificar -> extraer a un objeto
+
+### Idiom
+Solucion de un lenguaje particular a un problema recurrente. Otros son patrones de diseño y frameworks.
+
+Ejemplo
+
+Codigo 1
+```java
+File orders = file.open("orders.txt");
+try {
+   ...
+   file.write(...);
+   ...
+} finally {
+   file.close();
+}
+```
+
+Codigo 2
+```java
+File sales = file.open("sales.txt");
+try {
+   ...
+   file.write(...);
+   ...
+   file.write(...);
+   ...
+} finally {
+   file.close();
+}
+```
+
+Refactor
+```java
+openDuring(filename, closure) {
+   file = File.open(filename);
+   try {
+      closure.execute(file);
+   } finally {
+      file.close();
+   }
+}
+```
+
+Idiom
+```java
+file.openDuring('file.txt', file -> {
+   ...
+   file.write(...);
+   ...
+})
+```
+
+| Artefacto | Tipo      | Lenguage         | Dominio               |
+|-----------|-----------|------------------|-----------------------|
+| Idiom     | Concreta  | Dep. lenguaje    | No dominio particular |
+| Patron    | Abstracta | No dep. lenguaje | No dominio particular |
+| Framework | Concreta  | Dep. lenguaje    | Dominio particular    |
+
+Los frameworks deben incluir inversion of control, de otro modo no son frameworks. Si no tiene esta caracteristica, es una libreria. Siempre se encuentran en el ambito tecnico, no los hay de negocio.
+
+### Diseño de patrones
+Empresa Tecktronics (Oregon) implemento Smalltalk 80, Cunningham (patrones a partir de Timeless way of building, arquitectura) y Beck (XP, TDD) trabajaron juntos en objetos, crearon CRC.
+Johnson, Gamma, etc -> Gang of four -> Design patterns elements of reusable code (Ken Beck no participo porque los patrones se documentaron en forma academica)
+Plop -> surgen conferencias de patrones de diseño, de las primeras se editaron libros
+Para que un patron sea aceptado como tal, debe haber sido usado exitosamente en diversos contextos
+
+Patron: Nombre, Intencion o proposito, Usos conocidos
+
+Subclasificar para organizar conocimiento, por problemas esenciales, no para reutilizar codigo.
+
+#### Decorator
+Agregar funcionalidad ortogonal (no corresponde al dominio del problema que se decora) dinamicamente a un objeto. El decorator sabe responder los mismos metodos que el objeto que decora. Se pueden encadenar decorators y el orden puede importar, por lo cual se utiliza el patron builder para crear una cadena especifica de decoradores. Es polimorfico con el objeto que decora.
+Con un lenguaje estaticamente tipado y codigo que no fue escrito para ser decorado, puede ser dificil implementar decorator.
+En lenguajes de prototipacion (Javascript) el decorator no es una solucion ya que no existen problemas que se puedan resolver con decorator.
+
+#### Adapter
+Permitir que puedan conversar objetos que no estan preparados para eso, adapta interfaces.
+No es polimorfico con el objeto que adapta, aunque es estructuralmente igual al decorator.
+
+#### Proxy
+Intermediario entre el usuario del objeto y el objeto real, controla el acceso al objeto real.
+El proxy puede o no ser polimorfico con el objeto real.
+El proxy es estructuralmente similar al decorator y al adapter.
