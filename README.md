@@ -115,20 +115,20 @@ El cuerpo recursivo esta dado por el composite, mientras que el fin de la recurs
 Es necesario asegurar que el composite es un arbol, pero no un grafo con otro tipo de estructura, porque afecta la recursion (no ciclos, no nodos repetidos).
 Son polimorficos porque responden a los mismos mensajes manteniendo la semantica, o sea que, el comportamiento es consistente.
 
-                                  +--------------------+
-                                  | SummarizingAccount |
-                                  +--------------------+<------------+
-                                  |                    |             |
-                                  +--------------------+             |
-                                             ^                       |
-                                             |                       |
-                                +-----------------------+            |
-                                |                       |            |
-+-------------+       +------------------+        +-----------+      |
-| Transaction |<----<>| ReceptiveAccount |        | Portfolio |      |
-+-------------+       +------------------+        +-----------+<>----+
-|             |       |                  |        |           |
-+-------------+       +------------------+        +-----------+
+                                      +--------------------+
+                                      | SummarizingAccount |
+                                      +--------------------+<------------+
+                                      |                    |             |
+                                      +--------------------+             |
+                                                 ^                       |
+                                                 |                       |
+                                    +-----------------------+            |
+                                    |                       |            |
+    +-------------+       +------------------+        +-----------+      |
+    | Transaction |<----<>| ReceptiveAccount |        | Portfolio |      |
+    +-------------+       +------------------+        +-----------+<>----+
+    |             |       |                  |        |           |
+    +-------------+       +------------------+        +-----------+
 
 GoF aconsejo mantener la misma interfaz para todas las partes por cuestions historicas, en aquella epoca se usaba C++ y esto evitaba que ocurriera violacion de acceso. Ademas trabajar con excepciones en C++ es complejo, se requiere smart pointers, por este motivo los metodos agregados por la interfaz tienen implementacion vacia. 
 
@@ -138,3 +138,10 @@ Sistema de tipos
 |--------|------------------|-------------------------|
 | Strong | Java, C#, Eiffel | Smalltalk, Ruby, Python |
 | Weak   | C, C++           | Visual Basic 6          |
+
+
+Dia 3
+=====
+
+#### Method object
+Extraer un metodo en una clase.
