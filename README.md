@@ -5,6 +5,8 @@ Advanced Object Oriented Design II
 http://tinyurl.com/Objetos2-Octubre2019
 SuperObjetos2
 
+Accesos: arbolito, lindoarbol!
+
 ## Topics
 - Idioms
 - Patrones de diseño
@@ -145,3 +147,57 @@ Dia 3
 
 #### Method object
 Extraer un metodo en una clase.
+
+Dia 4
+=====
+
+#### Visitor
+Method object mas double dispatch generico. Recorre un conjunto de objetos polimorficos. Respeta el principio open-close.
+
+                                      +---------------------------+
+                                      |       <<Interface>>       |
+                                      | AccountTransactionVisitor |
+                                      +---------------------------+
+                                      | + visit(Deposit)          |
+                                      | + visit(Withdraw)         |
+                                      | + visit(TransferDeposit)  |
+                                      | + visit(TransferWithdraw) |
+                                      +---------------------------+
+                                                    ^
+                                                    |
+                            +---------------------------------------------+
+                            |                                             |
+                +-----------------------+                     +------------------------+
+                | AccountSummaryVisitor |                     | AccountTransferVisitor |
+                +-----------------------+                     +------------------------+
+                |                       |                     |                        |
+                +-----------------------+                     +------------------------+
+
+Sample of calling one of the visitors
+```java
+final AccountSummaryVisitor aVisitor = new AccountSummaryVisitor();
+fromAccount.transactions().forEach(transaction -> transaction.accept(aVisitor));
+```
+
+                                      +-------------------------------------+
+                                      |            <<Interface>>            |
+                                      |          AccountTransaction         |
+                                      +-------------------------------------+
+                                      | + accept(AccountTransactionVisitor) |
+                                      +-------------------------------------+
+                                                         ^
+                                                         |
+                                  +----------------------+-------------------+
+                                  |                      |                   |
+                           +-------------+         +----------+         +---------+
+                           | TransferLeg |         | Withdraw |         | Deposit |
+                           +-------------+         +----------+         +---------+
+                           |             |         |          |         |         |
+                           +-------------+         +----------+         +---------+
+
+Sample of calling one of the visitors
+```java
+public void accept(AccountTransactionVisitor aVisitor) {
+    aVisitor.visit(this);
+}
+```
