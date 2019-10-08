@@ -12,8 +12,8 @@ package ar.net.mgardos;
 
 import static org.junit.Assert.*;
 
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -279,15 +279,17 @@ public class PortfolioTest {
 		ReceptiveAccount toAccount = new ReceptiveAccount ();
 
 		Deposit.registerForOn(100,fromAccount);
+		Deposit.registerForOn(10,fromAccount);
 		Withdraw.registerForOn(50,fromAccount);
 		Transfer.registerFor(100,fromAccount, toAccount);
 		
 		List<String> lines = accountSummaryLines(fromAccount);
 		
-		assertEquals(3,lines.size());
+		assertEquals(4,lines.size());
 		assertEquals("Deposito por 100,00", lines.get(0));
-		assertEquals("Extraccion por 50,00", lines.get(1));
-		assertEquals("Transferencia por -100,00", lines.get(2));
+		assertEquals("Deposito por 10,00", lines.get(1));
+		assertEquals("Extraccion por 50,00", lines.get(2));
+		assertEquals("Transferencia por -100,00", lines.get(3));
 	}
 
 	private List<String> accountSummaryLines(ReceptiveAccount fromAccount) {
@@ -397,7 +399,7 @@ public class PortfolioTest {
 		Portfolio complexPortfolio = Portfolio.createWith(account1,account2);
 		Portfolio composedPortfolio = Portfolio.createWith(complexPortfolio,account3);
 
-		Hashtable<SummarizingAccount, String> accountNames = new Hashtable<SummarizingAccount, String>();
+		Map<SummarizingAccount, String> accountNames = new HashMap<SummarizingAccount, String>();
 		accountNames.put(composedPortfolio, "composedPortfolio");
 		accountNames.put(complexPortfolio, "complexPortfolio");
 		accountNames.put(account1, "account1");
@@ -412,12 +414,13 @@ public class PortfolioTest {
 		assertEquals("  account1", lines.get(2));
 		assertEquals("  account2", lines.get(3));
 		assertEquals(" account3", lines.get(4));
-		
 	}
 
-	private List<String> portfolioTreeOf(Portfolio composedPortfolio,
-			Hashtable<SummarizingAccount, String> accountNames) {
-		throw new UnsupportedOperationException();
+	private List<String> portfolioTreeOf(Portfolio composedPortfolio, Map<SummarizingAccount, String> accountNames) {
+		PortfolioTreePrinterVisitor aVisitor = new PortfolioTreePrinterVisitor(accountNames);
+		composedPortfolio.accept(aVisitor);
+
+		return aVisitor.printableLines();
 	}
 
 	@Test
@@ -447,7 +450,10 @@ public class PortfolioTest {
 	}
 
 	private List<String> reversePortfolioTreeOf(Portfolio composedPortfolio,
-			Hashtable<SummarizingAccount, String> accountNames) {
-		throw new UnsupportedOperationException();
+			Map<SummarizingAccount, String> accountNames) {
+		List<String> treePrinter = portfolioTreeOf(composedPortfolio, accountNames);
+		Collections.reverse(treePrinter);
+
+		return treePrinter;
 	}
 }

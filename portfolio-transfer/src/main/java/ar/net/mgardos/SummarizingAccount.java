@@ -17,5 +17,5 @@ public interface SummarizingAccount {
 	boolean registers(AccountTransaction transaction);
 	boolean manages(SummarizingAccount account);
 	List<AccountTransaction> transactions();
-	
+	void accept(SummarizingAccountVisitor aVisitor);
 }

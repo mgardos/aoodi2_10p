@@ -7,36 +7,29 @@ import java.util.List;
 
 public class AccountSummaryVisitor implements AccountTransactionVisitor {
     private static final NumberFormat DOUBLE_FORMAT = new DecimalFormat("#0.00");
-    private double depositValue = 0.0;
-    private double withdrawValue = 0.0;
-    private double transferValue = 0.0;
+    List<String> lines = new ArrayList<>();
 
     @Override
     public void visit(Deposit aDeposit) {
-        depositValue += aDeposit.value();
+        lines.add("Deposito por " + DOUBLE_FORMAT.format(aDeposit.value()));
     }
 
     @Override
     public void visit(Withdraw aWithdraw) {
-        withdrawValue += aWithdraw.value();
+        lines.add("Extraccion por " + DOUBLE_FORMAT.format(aWithdraw.value()));
     }
 
     @Override
     public void visit(TransferDeposit aTransferDeposit) {
-        transferValue += aTransferDeposit.signValue();
+        lines.add("Transferencia por " + DOUBLE_FORMAT.format(aTransferDeposit.signValue()));
     }
 
     @Override
     public void visit(TransferWithdraw aTransferWithdraw) {
-        transferValue += aTransferWithdraw.signValue();
+        lines.add("Transferencia por " + DOUBLE_FORMAT.format(aTransferWithdraw.signValue()));
     }
 
     public List<String> summary() {
-        List<String> lines = new ArrayList<>();
-        lines.add("Deposito por " + DOUBLE_FORMAT.format(depositValue));
-        lines.add("Extraccion por " + DOUBLE_FORMAT.format(withdrawValue));
-        lines.add("Transferencia por " + DOUBLE_FORMAT.format(transferValue));
-
         return lines;
     }
 }

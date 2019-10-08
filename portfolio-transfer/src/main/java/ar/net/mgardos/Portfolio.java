@@ -12,8 +12,9 @@ package ar.net.mgardos;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
-public class Portfolio implements SummarizingAccount{
+public class Portfolio implements SummarizingAccount {
 	public static final String ACCOUNT_NOT_MANAGED = "No se maneja esta cuenta";
 	public static final String ACCOUNT_ALREADY_MANAGED = "La cuenta ya está manejada por otro portfolio";
 	private List<SummarizingAccount> summarizingAccounts; 
@@ -60,9 +61,8 @@ public class Portfolio implements SummarizingAccount{
 			transactions.addAll(summarizingAccount.transactions());
 		
 		return transactions;
-		
 	}
-	
+
 	public void addAccount(SummarizingAccount anAccount) {
 		if (manages(anAccount))
 			throw new RuntimeException(ACCOUNT_ALREADY_MANAGED);
@@ -70,4 +70,12 @@ public class Portfolio implements SummarizingAccount{
 		summarizingAccounts.add(anAccount);
 	}
 
+	@Override
+	public void accept(SummarizingAccountVisitor aVisitor) {
+		aVisitor.visit(this);
+	}
+
+	public void visitAccounts(SummarizingAccountVisitor aVisitor) {
+		summarizingAccounts.forEach(anAccount -> anAccount.accept(aVisitor));
+	}
 }

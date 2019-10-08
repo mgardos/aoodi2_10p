@@ -42,4 +42,9 @@ public class ReceptiveAccount implements SummarizingAccount {
 	public List<AccountTransaction> transactions() {
 		return new ArrayList<AccountTransaction>(transactions);
 	}
+
+	@Override
+	public void accept(SummarizingAccountVisitor aVisitor) {
+		aVisitor.visit(this);
+	}
 }
