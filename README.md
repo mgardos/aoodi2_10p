@@ -7,7 +7,7 @@ GoF: http://www.uml.org.cn/c++/pdf/designpatterns.pdf
 http://tinyurl.com/Objetos2-Octubre2019
 SuperObjetos2
 
-Accesos: arbolito, lindoarbol!, llevatiempo, eltiemponoesnada
+Accesos: arbolito, lindoarbol!, llevatiempo, eltiemponoesnada, remueve, verparaarriba, observando, meta-visitador
 
 ## Topics
 - Idioms
@@ -240,7 +240,6 @@ $ java -cp .:/C/Users/usuario/.m2/repository/junit/junit/4.12/junit-4.12.jar:/C/
 ```
 
 ### Excepciones
-
 Es el patron usado para evitar codigo repetido resultante del uso de la tecnica de codigo de error. No hay razon para no hacer uso de excepciones, no es verdad que su uso lentifique la implementacion, esto depende de las implementaciones, del codigo del usuario y del lenguaje.
 
 Explicacion conceptual de excepciones: contratos. Hay contratos explicitos e implicitos.
@@ -260,3 +259,30 @@ la escuela lisp/mit es la mas adecuada para evitar, por ejemplo, problemas de se
 El manejo de la excepciones se debe realizar en la raiz o cerca de la raiz en el arbol de ejecucion. El rol de las hojas del arbol de ejecucion es generar excepciones, si corresponde.
 
 Si el error es recuperable, tiene sentido generar una excepcion esecifica.
+
+Dia 6
+=====
+
+Es dudoso reemplazar una sentencia IF cuando los colaboradores corresponden a distintos dominios, como es el caso de una validacion sobre un numero que realiza un colaborador del dominio de interes.
+
+#### State
+El colaborador que esta compuesto por el estado delega el dicho estado sus interacciones con colaboradores externos. A pesar de esto, ambos no son polimorficos. El estado utiliza double dispatch para evitar romper encapsulamiento accediendo al estado de colaborador que esta compuesto por el estado. El estado decide que hacer pero no lo hace, le indica al colaborador que debe hacer.
+El estado debe conocer de quien es estado, y no debe ser singleton ya que genera acoplamiento global lo cual impide poder parametrizar, pruebas unitarias. Es una instancia de un automata deterministico, es una maquina de estados.
+
+     +-----------------+             +---------------------+
+     |    TicTacToe    |             |    TicTacToeState   |
+     +-----------------+<>---------->+---------------------+
+     |                 |             |                     |
+     +-----------------+             +---------------------+
+                                                ^
+                                                |
+                 +-------------+----------------+----------------+-------------+
+                 |             |                |                |             |
+            +--------+     +--------+      +---------+      +--------+     +--------+
+            |  WinX  |     |  WinO  |      |  PlayX  |      |  PlayO |     |  Tied  |
+            +--------+     +--------+      +---------+      +--------+     +--------+
+            |        |     |        |      |         |      |        |     |        |
+            +--------+     +--------+      +---------+      +--------+     +--------+
+
+### Metaprogramacion
+Verificar que un visitor es implementado correctamente. Definir reglas respecto a como implementar un visitor correctamente.
